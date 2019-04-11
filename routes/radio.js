@@ -5,6 +5,7 @@ const bodyParser = require('body-parser')
 const multer = require('multer')
 const session = require('express-session')
 const logger = require('morgan')
+const fs = require('fs')
 //Initialize Routers
 const router = express.Router()
 
@@ -12,7 +13,7 @@ const router = express.Router()
 //Instantiate Middleware Services
 const storage = multer.diskStorage({
     destination: function(req, file, done) {
-        done(null, 'public/radio/')
+        done(null, 'uploads/radio/')
     },
     filename: function(req, file, done) {
         done(null, file.fieldname + '-' + Date.now() + path)
@@ -23,6 +24,24 @@ const upload = multer({storage: storage})
 router.get('/', function(req,res) {
 
 	return res.render('radio')
+})
+
+router.get('/play', function(req, res) {
+    //res.send("Volvme radio stream")
+
+    const playlist = []
+    fs.readdir('uploads/radio/', function(err, files) {
+
+        if (err) res.status(500).json(err)
+        files.forEach(file => {
+            fs.exists(file, function(exists){
+                const filePath = 'uploads/radio/' + file
+                const radioStream = fs.createReadStream(filePath)
+                radioStream.pipe(res)
+            })
+        })
+        
+    })
 })
 
 router.post('/upload', upload.single('radioUpload'), function(req, res) {

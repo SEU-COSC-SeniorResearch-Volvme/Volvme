@@ -51,25 +51,57 @@ exports.getAllPublicPosts = function(req, res) {
 
 exports.createPublicPost = function(req, res) {
 
-	console.log('not yet implemented')
+	const author = req.body.authorID
+	const body = req.body.postBody
+
+	const new_post = new Post({
+		_id: mongoose.Types.ObjectId(),
+		author: author,
+		body: body
+	})
+	new_post.save()
+	return res.status(201).redirect('/community')
 
 }
 
 exports.editPublicPost = function(req, res) {
 
-	console.log('not yet implemented')
+	const postID = req.body.postID
+	const author = req.body.authorID
+	const body = req.body.postBody
 
+	Post.findByIdAndUpdate(
+		postID,
+		{$set: { body: body }},
+		function(err, done){ 
+			if (err) res.status(500).json(err)
+			return res.status(200).redirect('/community')
+	})
 }
 
 exports.deletePublicPost = function(req, res) {
 
-	console.log('not yet implemented')
-
+	Post.findByIdAndDelete(
+		req.body.postID,
+		function(err, done) {
+			if (err) return res.status(500).json(err)
+			return res.status(200).redirect('/community')
+	})
 }
 
 exports.likePost = function(req, res) {
 
-	console.log('not yet implemented')
+	const postID = req.body.postID
+	const liker = req.body.likerID
+
+	Post.findByIdAndUpdate(
+		postID,
+		{$push: {likes: liker }},
+		function(err, post) {
+			if (err) return res.status(500).json(err)
+			return res.status(200).redirect('/community')
+		}
+	)
 }
 
 exports.getAllPublicEvents = function(req, res) {

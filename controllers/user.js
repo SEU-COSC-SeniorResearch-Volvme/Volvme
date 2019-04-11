@@ -29,14 +29,14 @@ exports.signup = function(req, res) {
 	    	profile: {
 	    		name: req.body.name
 	    	}
-    	})
+    })
 		new_user.setPassword(req.body.password)
 		new_user.save(function(err, new_user){
 
 					if (err) return res.status(500).json(err)
 					req.session.user = new_user
 					return res.status(201).json(new_user.toAuthProfile())
-				})
+		})
 	}
 }//End Post Signup//
 
@@ -189,21 +189,31 @@ exports.getFriends = function(req, res) {
 )}
 
 exports.createProject = function(req, res) {
-
 	//res.send("Add a Project to a Users Project list")
+	const title = req.body.title
+	const creator = req.body.creatorID
 	const new_project = new Project({
-
      	_id: mongoose.Types.ObjectId(),
-     	title: req.params.title,
-    	creator: req.params.creatorID
-    })
-  	new_project.save(function(err, new_project) {
-
-      	if (err) return res.status(500).json(err)
-      	User.profile.projects.push(new_project)
-		User.save( function(err, success) {
-			if (err) return res.status(500).json(err)
-			res.status(201).send("Project Created and Added to Project List")
+     	title: title,
+    	creator: creator
+	})
+	User.findById(creator, function(err, user) {
+		if (err) {
+			console.log('Error finding project creator')
+			return res.status(500).json(err)
+		}
+		user.profile.projects.push(new_project._id)
+		user.save(function(err, done) {
+			if (err) {
+				console.log('Error saving user')
+				return res.status(500).json(err)
+			}
+		new_project.save(function(err, new_project) { 
+				if (err) {
+					console.log('Error saving project')
+					return res.status(500).json(err)
+				}
+			})
 		})
 	})
 }
@@ -214,14 +224,15 @@ exports.updateProject = function(req, res) {
 }
 
 exports.deleteProject = function(req, res) {
-
 	//res.send("Remove a User Project")
-	const project = { id: req.params.id }
-	User.profile.projects.pull(project)
-	User.save( function(err, success) {
-		if (err) return res.status(500).json(err)
-		return res.status(200).send("Project Deleted and Removed from List")
+	const projectID = req.body.projectID
+	const userID = req.body.userID
+	Project.findByIdAndDelete(projectID)
+	User.findById(userID, function(err, user) {
+		user.profile.projects.pull(projectID)
 	})
+	return res.status(200).json("Project Successfully Deleted")
+
 }
 
 //jake routes

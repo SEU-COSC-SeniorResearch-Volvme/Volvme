@@ -15,10 +15,12 @@ router.get('/', controller.index)
 
 
 router.route('/post')
+		.get()
 		.post(controller.createPublicPost)
 		.put(controller.editPublicPost)
 		.delete(controller.deletePublicPost)
-		.patch(controller.likePost)
+
+router.post('/post/like', controller.likePost)
 
 router.route('/posts')
 		.get(controller.getAllPublicPosts)
