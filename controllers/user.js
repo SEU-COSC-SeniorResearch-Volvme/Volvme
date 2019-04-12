@@ -162,15 +162,16 @@ exports.addFriend = function(req, res) {
 	//res.send("Add a Friend to a Users Friend list")
 	const friend = req.body.friendID
 	const friends = [friend]
-	User.findOne({_id: req.body.userID})
-		.exec(function(err, user) {
-			if (err) return res.status(500).send("Error Finding this User")
+	User.findByIdAndUpdate(
+		mongoose.Types.ObjectId(req.body.userID),
+		{$push:{
+			"profile.friends": 	mongoose.Types.ObjectId(req.body.friendID),
+
+		}},
+		function(err, user) {
+			if (err) return res.status(500).send(err)
 			if (!user) return res.status(404).send("No user found.")
-			user.profile.friends.push(friend)
-		// 	user.save(function(err, success) {
-		// 		if (err) return res.status(500).json(err)
-		 		return res.status(200).json(user.toAuthProfile())
-		// 	})
+		 	return res.status(200).json(user.toAuthProfile())
 		 })
 }
 
