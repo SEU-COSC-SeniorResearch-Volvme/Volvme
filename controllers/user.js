@@ -32,7 +32,6 @@ exports.signup = function(req, res) {
     	})
 		new_user.setPassword(req.body.password)
 		new_user.save(function(err, new_user){
-
 					if (err) return res.status(500).json(err)
 					return res.status(201).json(new_user.toAuthProfile())
 				})
@@ -41,7 +40,6 @@ exports.signup = function(req, res) {
 
 exports.login = function(req, res) {
 
-	if (req.session.user) return res.redirect('http://volvme.xyz/app/user/dashboard')
 
 	if (req.body.email && req.body.password) {
 		User.findOne({email: req.body.email	})
