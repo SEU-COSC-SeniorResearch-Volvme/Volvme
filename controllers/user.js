@@ -168,6 +168,7 @@ exports.addFriend = function(req, res) {
 			"profile.friends": 	mongoose.Types.ObjectId(req.body.friendID),
 
 		}},
+		{new:true},
 		function(err, user) {
 			if (err) return res.status(500).send(err)
 			if (!user) return res.status(404).send("No user found.")
