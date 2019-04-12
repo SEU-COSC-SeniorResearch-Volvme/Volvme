@@ -116,6 +116,18 @@ exports.getUserByID = function(req, res) {
 	})
 }
 
+exports.getUserByName = function(req, res) {
+
+	//const user = {_id: req.body.userID }
+	User.findOne({_id: req.body.userID},
+								{profile: true})
+		.exec(function(err, user) {
+        if (err) return res.status(500).send("Error Finding this User")
+        if (!user) return res.status(404).send("No user found.")
+        res.status(200).json(user.toProfile())
+	})
+}
+
 exports.updateBio = function(req, res) {
 
 	const bio = req.body.bio
