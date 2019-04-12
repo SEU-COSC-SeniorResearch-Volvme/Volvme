@@ -49,7 +49,7 @@ router.post('/upload', upload.single('radioUpload'), function(req, res) {
     const file = req.file
     if (!file) return res.status(500).send('Please upload a file')
     console.log('successful file upload')
-	return res.status(200).redirect('https://volvme.xyz/app/radio')
+	return res.status(200)
 })
 
 module.exports = router
