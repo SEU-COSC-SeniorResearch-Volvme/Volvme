@@ -60,7 +60,7 @@ exports.createPublicPost = function(req, res) {
 		body: body
 	})
 	new_post.save()
-	return res.status(201).redirect('/community')
+	return res.status(201).send("Success")
 
 }
 

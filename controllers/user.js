@@ -146,7 +146,7 @@ exports.updateBio = function(req, res) {
 
 	User.findOneAndUpdate( 
 		{email: req.body.email},
-		{$set: { profile: {bio: bio} }},
+		{$set: {bio:bio}},
 		{new: true},
 		function(err, updatedUser) {
 			if (err) return res.status(500).json(err)
