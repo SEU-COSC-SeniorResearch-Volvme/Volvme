@@ -1,8 +1,22 @@
 const express = require('express')
-//Initialize Routers change
+const multer = require('multer')
+//Initialize Routers 
 const router = express.Router()
 //Import Controllers
 const controller = require('../controllers/user')
+
+
+//Instantiate Middleware Services
+const storage = multer.diskStorage({
+    destination: function(req, file, done) {
+        done(null, 'uploads/user/')
+    },
+    filename: function(req, file, done) {
+        done(null, file.fieldname + '-' + Date.now())
+    }
+})
+const upload = multer({storage: storage})
+
 
 //Route-Specific Middlewares
 const redirectLogin = function(req, res, next) {
@@ -35,6 +49,7 @@ router.post('/removeFriend', controller.removeFriend)
 router.post('/createProject/:title/:id', controller.createProject)
 router.post('/deleteProject/:id', controller.deleteProject)
 router.put('/updateBio', controller.updateBio)
+router.post('/upload/image', upload.single('image'), controller.uploadImage)
 
 //jake routes
 router.post('/getStuff', controller.getStuff)

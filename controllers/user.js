@@ -91,7 +91,7 @@ exports.logout = function (req, res, next) {
 				return next(err)
 			else
 				return res.redirect('https://volvme.xyz/', {
-					
+
 				})
 		})
 	}
@@ -235,6 +235,19 @@ exports.deleteProject = function(req, res) {
 	})
 	return res.status(200).json("Project Successfully Deleted")
 
+}
+
+exports.uploadImage = function(req, res) {
+
+	const userID = req.body.userID
+	const file = req.file
+  if (!file) return res.status(500).send('Please upload a file')
+	console.log('successful file upload')
+	User.findByIdAndUpdate(
+		userID,
+		{$set: { image: file.filename}}
+	)
+	return res.status(200).send("success")
 }
 
 //jake routes
