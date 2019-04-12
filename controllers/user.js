@@ -90,7 +90,9 @@ exports.logout = function (req, res, next) {
 			if (err)
 				return next(err)
 			else
-				return res.redirect('https://volvme.xyz/')
+				return res.redirect('https://volvme.xyz/', {
+					
+				})
 		})
 	}
 }//End Logout//

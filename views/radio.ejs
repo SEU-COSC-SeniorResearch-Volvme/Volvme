@@ -10,9 +10,16 @@
     <h1>Volvme Radio</h1>
 
     <h2>Upload your song and be heard!</h2>
+
+    <form action="/radio/play" method="get">
+    <input type="button">
+    <input type="submit">
+    </form>
+
     <form action="/radio/upload" method="post" enctype="multipart/form-data">
     <input type="file" name="radioUpload" accept="audio/*"><br>
     <input type="submit" value="Upload Song">
     </form>
+
 </body>
 </html>
