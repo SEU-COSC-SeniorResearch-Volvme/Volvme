@@ -153,11 +153,11 @@ exports.addFriend = function(req, res) {
 			if (err) return res.status(500).send("Error Finding this User")
 			if (!user) return res.status(404).send("No user found.")
 			user.profile.friends.push(friend)
-			user.save(function(err, success) {
-				if (err) return res.status(500).json(err)
-				return res.status(200).json(user.toAuthProfile())
-			})
-		})
+		// 	user.save(function(err, success) {
+		// 		if (err) return res.status(500).json(err)
+		 		return res.status(200).json(user.toAuthProfile())
+		// 	})
+		 })
 }
 
 exports.removeFriend = function(req, res) {
