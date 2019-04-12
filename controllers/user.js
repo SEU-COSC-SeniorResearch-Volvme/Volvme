@@ -34,7 +34,6 @@ exports.signup = function(req, res) {
 		new_user.save(function(err, new_user){
 
 					if (err) return res.status(500).json(err)
-					//req.session.user = new_user
 					return res.status(201).json(new_user.toAuthProfile())
 				})
 	}
@@ -50,7 +49,6 @@ exports.login = function(req, res) {
 				if (err) return res.status(500).send("Error Finding User")
 				if (!user) return res.status(404).json({"message": "The email provided is not registered with us!"})
 	  			if (!user.validPassword(req.body.password)) return res.status(401).json({"message": "Invalid Password"})
-	  			//req.session.user = user
 	  			return res.status(200).json(user.toAuthProfile())
 			})
 	}
