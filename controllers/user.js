@@ -137,7 +137,7 @@ exports.updateBio = function(req, res) {
 // }
 
 	User.findOneAndUpdate( 
-		{email: req.params.email},
+		{email: req.body.email},
 		{$set: { profile: {bio: bio} }},
 		{new: true},
 		function(err, updatedUser) {
@@ -247,7 +247,10 @@ exports.uploadImage = function(req, res) {
 		userID,
 		{$set: { image: file.filename}}
 	)
-	return res.status(200).send("success")
+	return res.status(200).json({
+		message: "Success",
+		file: file
+	})
 }
 
 //jake routes
